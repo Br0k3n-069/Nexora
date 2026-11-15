@@ -1,6 +1,9 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -172,6 +175,80 @@ namespace NEXORA
             });
             preview.Content = panel;
             preview.ShowDialog();
+        }
+
+
+        private async void CheckUpdates_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var request = (HttpWebRequest)WebRequest.Create("https://api.github.com/repos/Br0k3n-069/Nexora/releases/latest");
+                request.UserAgent = "NEXORA-Update-Checker";
+                request.Timeout = 10000;
+                string json;
+                using (var response = (HttpWebResponse)await request.GetResponseAsync())
+                using (var reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8))
+                    json = await reader.ReadToEndAsync();
+
+                var tag = Regex.Match(json, "\"tag_name\"\\s*:\\s*\"([^\"]+)\"");
+                var url = Regex.Match(json, "\"html_url\"\\s*:\\s*\"([^\"]+)\"");
+                if (!tag.Success)
+                {
+                    MessageBox.Show(this, "GitHub did not return a release version.", "NEXORA updates", MessageBoxButton.OK, MessageBoxImage.Information);
+                    return;
+                }
+                MessageBox.Show(this, "Latest published release: " + tag.Groups[1].Value +
+                    (url.Success ? Environment.NewLine + url.Groups[1].Value : "") +
+                    Environment.NewLine + "Current local build: 0.2.0. This checker does not download or install updates automatically.",
+                    "NEXORA updates", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (WebException ex)
+            {
+                var status = ex.Response as HttpWebResponse;
+                if (status != null && status.StatusCode == HttpStatusCode.NotFound)
+                    MessageBox.Show(this, "No GitHub Release has been published for this repository yet.", "NEXORA updates", MessageBoxButton.OK, MessageBoxImage.Information);
+                else
+                    MessageBox.Show(this, "Update check failed: " + ex.Message, "NEXORA updates", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, ex.Message, "NEXORA updates", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+
+        private void ShowChangelog_Click(object sender, RoutedEventArgs e)
+        {
+            ShowInfoWindow("NEXORA changelog", "NEXORA 0.2.0\n- Added local subscription manager\n- Added URL subscription import and manual refresh\n- Added config-file import records for OpenVPN and WireGuard / AmneziaWG\n- Added link and JSON export with preview\n- Added page fade transitions and reduced-motion setting\n- Added GitHub release checker\n\nImportant: VPN tunnel backends are not included in this build.");
+        }
+
+        private void ShowAbout_Click(object sender, RoutedEventArgs e)
+        {
+            ShowInfoWindow("About NEXORA", "NEXORA 0.2.0\nWindows desktop network client\nWPF / .NET Framework 4.8\n\nLocal-first configuration and subscription manager.\n\nThe current build imports and stores configuration data but does not establish VPN tunnels. A compatible backend must be integrated and tested separately.");
+        }
+
+        private void ShowInfoWindow(string title, string content)
+        {
+            var window = new Window
+            {
+                Owner = this, Title = title, Width = 540, Height = 360,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                Background = new SolidColorBrush(Color.FromRgb(22, 28, 31)),
+                Foreground = Brushes.White
+            };
+            var panel = new DockPanel { Margin = new Thickness(20) };
+            var close = new Button { Content = "Close", MinWidth = 85, HorizontalAlignment = HorizontalAlignment.Right, Margin = new Thickness(0, 14, 0, 0) };
+            close.Click += (s, e) => window.Close();
+            DockPanel.SetDock(close, Dock.Bottom);
+            panel.Children.Add(close);
+            panel.Children.Add(new TextBox
+            {
+                Text = content, IsReadOnly = true, TextWrapping = TextWrapping.Wrap,
+                AcceptsReturn = true, Background = Brushes.Transparent,
+                BorderThickness = new Thickness(0), Foreground = Brushes.White,
+                FontFamily = new FontFamily("Segoe UI")
+            });
+            window.Content = panel;
+            window.ShowDialog();
         }
 
         private static string GetSourceName(string url)
