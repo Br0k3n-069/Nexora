@@ -1,0 +1,217 @@
+<Window x:Class="NEXORA.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="NEXORA" Height="760" Width="1180" MinHeight="650" MinWidth="980"
+        WindowStartupLocation="CenterScreen" Background="{DynamicResource WindowBrush}"
+        Foreground="{DynamicResource TextBrush}" FontFamily="Segoe UI">
+    <Window.Resources>
+        <Style x:Key="NavButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Margin" Value="0,2"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Padding" Value="12,10"/>
+        </Style>
+        <Style x:Key="Surface" TargetType="Border">
+            <Setter Property="Background" Value="{DynamicResource PanelBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="7"/>
+            <Setter Property="Padding" Value="17"/>
+        </Style>
+        <Style x:Key="PageHeading" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="23"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+        </Style>
+        <Style x:Key="Muted" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource MutedBrush}"/>
+        </Style>
+        <Style x:Key="SectionLabel" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="{DynamicResource MutedBrush}"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="12">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="204"/>
+            <ColumnDefinition Width="14"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Compact, utility-like navigation -->
+        <Border Grid.Column="0" Background="#FF171D20" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="7">
+            <DockPanel Margin="13">
+                <StackPanel DockPanel.Dock="Top" Margin="4,7,4,24">
+                    <TextBlock Text="NEXORA" FontSize="20" FontWeight="Bold"/>
+                    <TextBlock Text="DESKTOP NETWORK CLIENT" FontSize="8" Foreground="{DynamicResource MutedBrush}" Margin="1,5,0,0"/>
+                </StackPanel>
+                <StackPanel DockPanel.Dock="Bottom" Margin="4,15,4,3">
+                    <Border Height="1" Background="{DynamicResource BorderBrush}" Margin="0,0,0,12"/>
+                    <TextBlock Text="VERSION 0.1.0" FontSize="9" Foreground="{DynamicResource MutedBrush}"/>
+                    <TextBlock Text="Local configuration" FontSize="10" Foreground="{DynamicResource MutedBrush}" Margin="0,4,0,0"/>
+                </StackPanel>
+                <StackPanel>
+                    <TextBlock Text="WORKSPACE" Style="{StaticResource SectionLabel}" Margin="7,0,0,8"/>
+                    <Button Style="{StaticResource NavButton}" Content="▦   Overview" Tag="Dashboard" Click="Navigate_Click"/>
+                    <Button Style="{StaticResource NavButton}" Content="↔   Connections" Tag="Connections" Click="Navigate_Click"/>
+                    <Button Style="{StaticResource NavButton}" Content="▤   Profiles" Tag="Profiles" Click="Navigate_Click"/>
+                    <Border Height="1" Background="{DynamicResource BorderBrush}" Margin="5,13,5,13"/>
+                    <TextBlock Text="APPEARANCE" Style="{StaticResource SectionLabel}" Margin="7,0,0,8"/>
+                    <Button Style="{StaticResource NavButton}" Content="◈   Theme Studio" Tag="Theme" Click="Navigate_Click"/>
+                    <Button Style="{StaticResource NavButton}" Content="▥   Layout Editor" Tag="Layout" Click="Navigate_Click"/>
+                    <Button Style="{StaticResource NavButton}" Content="◇   Animations" Tag="Animations" Click="Navigate_Click"/>
+                    <Border Height="1" Background="{DynamicResource BorderBrush}" Margin="5,13,5,13"/>
+                    <Button Style="{StaticResource NavButton}" Content="⚙   Settings" Tag="Settings" Click="Navigate_Click"/>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+
+        <Border Grid.Column="2" Background="#FF151B1E" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="7" Padding="25,22">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="1"/>
+                    <RowDefinition Height="16"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <DockPanel Grid.Row="0" LastChildFill="True">
+                    <Border DockPanel.Dock="Right" Background="#FF20282C" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="9,6" VerticalAlignment="Center">
+                        <TextBlock x:Name="OsBadge" Text="Detecting system" FontSize="10" Foreground="{DynamicResource MutedBrush}"/>
+                    </Border>
+                    <StackPanel>
+                        <TextBlock x:Name="PageTitle" Text="Overview" Style="{StaticResource PageHeading}"/>
+                        <TextBlock x:Name="PageSubtitle" Text="System status and quick access" Style="{StaticResource Muted}" FontSize="11" Margin="0,4,0,0"/>
+                    </StackPanel>
+                </DockPanel>
+                <Border Grid.Row="1" Background="{DynamicResource BorderBrush}"/>
+
+                <ScrollViewer Grid.Row="3" VerticalScrollBarVisibility="Auto">
+                    <Grid>
+                        <!-- Dashboard -->
+                        <StackPanel x:Name="DashboardPage">
+                            <TextBlock Text="SYSTEM OVERVIEW" Style="{StaticResource SectionLabel}" Margin="0,0,0,10"/>
+                            <Border Style="{StaticResource Surface}" Padding="18">
+                                <Grid>
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                                    <StackPanel>
+                                        <TextBlock Text="CONNECTION" Style="{StaticResource SectionLabel}"/>
+                                        <TextBlock Text="Not configured" FontSize="22" FontWeight="SemiBold" Margin="0,8,0,3"/>
+                                        <TextBlock Text="No network engine is connected to this installation." Style="{StaticResource Muted}" FontSize="11" TextWrapping="Wrap"/>
+                                    </StackPanel>
+                                    <Button Grid.Column="1" Content="Manage connections" Style="{StaticResource PrimaryButton}" VerticalAlignment="Center" Click="OpenConnections_Click"/>
+                                </Grid>
+                            </Border>
+                            <TextBlock Text="QUICK ACCESS" Style="{StaticResource SectionLabel}" Margin="0,24,0,10"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="12"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                <Border Grid.Column="0" Style="{StaticResource Surface}">
+                                    <StackPanel>
+                                        <TextBlock Text="PROFILES" Style="{StaticResource SectionLabel}"/>
+                                        <TextBlock x:Name="ActiveProfileText" Text="No profile selected" FontSize="16" FontWeight="SemiBold" Margin="0,9,0,4"/>
+                                        <TextBlock Text="Manage saved server configurations." Style="{StaticResource Muted}" FontSize="11" TextWrapping="Wrap"/>
+                                        <Button Content="Open profiles" HorizontalAlignment="Left" Margin="0,14,0,0" Click="Navigate_Click" Tag="Profiles"/>
+                                    </StackPanel>
+                                </Border>
+                                <Border Grid.Column="2" Style="{StaticResource Surface}">
+                                    <StackPanel>
+                                        <TextBlock Text="APPEARANCE" Style="{StaticResource SectionLabel}"/>
+                                        <TextBlock Text="Workspace theme" FontSize="16" FontWeight="SemiBold" Margin="0,9,0,4"/>
+                                        <TextBlock Text="Adjust the interface without changing system settings." Style="{StaticResource Muted}" FontSize="11" TextWrapping="Wrap"/>
+                                        <Button Content="Open Theme Studio" HorizontalAlignment="Left" Margin="0,14,0,0" Click="OpenTheme_Click"/>
+                                    </StackPanel>
+                                </Border>
+                            </Grid>
+                            <TextBlock Text="NEXORA keeps profile data on this device. The connection panel remains inactive until a compatible backend is installed." Style="{StaticResource Muted}" FontSize="10" TextWrapping="Wrap" Margin="1,20,0,0"/>
+                        </StackPanel>
+
+                        <!-- Connections -->
+                        <StackPanel x:Name="ConnectionsPage" Visibility="Collapsed">
+                            <TextBlock Text="CONNECTION ENGINE" Style="{StaticResource SectionLabel}" Margin="0,0,0,10"/>
+                            <Border Style="{StaticResource Surface}">
+                                <StackPanel>
+                                    <TextBlock Text="Backend not configured" FontSize="18" FontWeight="SemiBold"/>
+                                    <TextBlock Text="The connection interface is prepared, but this starter build does not include a VPN backend. It will not report a connection as active unless a real engine confirms it." Style="{StaticResource Muted}" TextWrapping="Wrap" Margin="0,9,0,14"/>
+                                    <Border Background="#FF252E33" CornerRadius="4" Padding="10">
+                                        <TextBlock Text="ENGINE STATUS     NOT CONFIGURED" Foreground="{DynamicResource AccentBrush}" FontSize="10" FontWeight="SemiBold"/>
+                                    </Border>
+                                    <TextBlock Text="Next integration point: IConnectionEngine" Style="{StaticResource Muted}" FontSize="10" Margin="0,12,0,0"/>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+
+                        <!-- Profiles -->
+                        <Grid x:Name="ProfilesPage" Visibility="Collapsed">
+                            <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="12"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+                            <DockPanel>
+                                <TextBlock Text="SAVED PROFILES" Style="{StaticResource SectionLabel}" VerticalAlignment="Center"/>
+                                <Button DockPanel.Dock="Right" Content="＋  Add profile" Style="{StaticResource PrimaryButton}" Click="AddProfile_Click"/>
+                            </DockPanel>
+                            <ListBox x:Name="ProfilesList" Grid.Row="2" Background="Transparent" BorderThickness="0"
+                                     Foreground="{DynamicResource TextBrush}" SelectionChanged="ProfilesList_SelectionChanged"
+                                     DisplayMemberPath="Name"/>
+                        </Grid>
+
+                        <!-- Theme -->
+                        <StackPanel x:Name="ThemePage" Visibility="Collapsed">
+                            <TextBlock Text="THEME STUDIO" Style="{StaticResource SectionLabel}"/>
+                            <TextBlock Text="Interface appearance" FontSize="18" FontWeight="SemiBold" Margin="0,7,0,4"/>
+                            <TextBlock Text="A restrained palette designed for long desktop sessions." Style="{StaticResource Muted}" FontSize="11" Margin="0,0,0,22"/>
+                            <TextBlock Text="ACCENT PRESET" Style="{StaticResource SectionLabel}" Margin="0,0,0,7"/>
+                            <ComboBox x:Name="AccentPicker" Width="230" HorizontalAlignment="Left" SelectedIndex="0" SelectionChanged="AccentPicker_SelectionChanged">
+                                <ComboBoxItem Content="Sage / Default"/><ComboBoxItem Content="Steel Blue"/><ComboBoxItem Content="Muted Mint"/><ComboBoxItem Content="Dusty Rose"/><ComboBoxItem Content="Warm Brass"/>
+                            </ComboBox>
+                            <Border Height="1" Background="{DynamicResource BorderBrush}" Margin="0,23,0,18"/>
+                            <TextBlock Text="SURFACE OPACITY" Style="{StaticResource SectionLabel}" Margin="0,0,0,8"/>
+                            <Slider x:Name="OpacitySlider" Minimum="0.35" Maximum="0.95" Value="0.86" Width="340" HorizontalAlignment="Left" ValueChanged="OpacitySlider_ValueChanged"/>
+                            <TextBlock Text="Opacity changes the app's panel surfaces. Desktop blur is dependent on the operating system and graphics support." Style="{StaticResource Muted}" FontSize="10" TextWrapping="Wrap" Width="520" Margin="0,12,0,0"/>
+                        </StackPanel>
+
+                        <!-- Layout -->
+                        <StackPanel x:Name="LayoutPage" Visibility="Collapsed">
+                            <TextBlock Text="LAYOUT EDITOR" Style="{StaticResource SectionLabel}"/>
+                            <TextBlock Text="Workspace arrangement" FontSize="18" FontWeight="SemiBold" Margin="0,7,0,4"/>
+                            <TextBlock Text="Choose a starting layout. Fine-grained drag-and-drop editing can be added in a later iteration." Style="{StaticResource Muted}" FontSize="11" TextWrapping="Wrap" Margin="0,0,0,20"/>
+                            <Button Content="Compact dashboard" HorizontalAlignment="Left" Click="LayoutPreset_Click"/>
+                            <Button Content="Balanced dashboard" HorizontalAlignment="Left" Margin="0,9,0,0" Click="LayoutPreset_Click"/>
+                            <Button Content="Wide dashboard" HorizontalAlignment="Left" Margin="0,9,0,0" Click="LayoutPreset_Click"/>
+                            <TextBlock x:Name="LayoutMessage" Text="Current preset: Balanced" Foreground="{DynamicResource AccentBrush}" FontSize="11" Margin="0,17,0,0"/>
+                        </StackPanel>
+
+                        <!-- Animations -->
+                        <StackPanel x:Name="AnimationsPage" Visibility="Collapsed">
+                            <TextBlock Text="ANIMATION SETTINGS" Style="{StaticResource SectionLabel}"/>
+                            <TextBlock Text="Motion and feedback" FontSize="18" FontWeight="SemiBold" Margin="0,7,0,4"/>
+                            <TextBlock Text="Keep interface motion subtle and purposeful." Style="{StaticResource Muted}" FontSize="11" Margin="0,0,0,20"/>
+                            <CheckBox x:Name="AnimationsEnabled" Content="Enable interface animations" IsChecked="True" Margin="0,0,0,16"/>
+                            <TextBlock Text="ANIMATION INTENSITY" Style="{StaticResource SectionLabel}" Margin="0,0,0,8"/>
+                            <Slider Minimum="0" Maximum="100" Value="45" Width="340" HorizontalAlignment="Left"/>
+                            <TextBlock Text="Reduced-motion behavior will be respected by the full animation engine." Style="{StaticResource Muted}" FontSize="10" Margin="0,12,0,0"/>
+                        </StackPanel>
+
+                        <!-- Settings -->
+                        <StackPanel x:Name="SettingsPage" Visibility="Collapsed">
+                            <TextBlock Text="APPLICATION SETTINGS" Style="{StaticResource SectionLabel}"/>
+                            <TextBlock Text="About this installation" FontSize="18" FontWeight="SemiBold" Margin="0,7,0,18"/>
+                            <TextBlock Text="VERSION" Style="{StaticResource SectionLabel}"/>
+                            <TextBlock Text="NEXORA 0.1.0 — Compatibility starter" FontSize="12" Margin="0,5,0,17"/>
+                            <TextBlock Text="LOCAL DATA DIRECTORY" Style="{StaticResource SectionLabel}"/>
+                            <TextBlock Text="%LOCALAPPDATA%\NEXORA" FontSize="12" Margin="0,5,0,17"/>
+                            <TextBlock Text="COMPATIBILITY" Style="{StaticResource SectionLabel}"/>
+                            <TextBlock x:Name="CompatibilityText" Text="Checking system…" Style="{StaticResource Muted}" FontSize="11" TextWrapping="Wrap" Margin="0,5,0,0"/>
+                        </StackPanel>
+                    </Grid>
+                </ScrollViewer>
+
+                <DockPanel Grid.Row="4" Margin="0,15,0,0">
+                    <Border Height="1" Background="{DynamicResource BorderBrush}" DockPanel.Dock="Top" Margin="0,0,0,10"/>
+                    <TextBlock Text="NEXORA  /  LOCAL-FIRST CONFIGURATION" Style="{StaticResource Muted}" FontSize="9"/>
+                    <TextBlock DockPanel.Dock="Right" Text="BUILD 0.1.0" Style="{StaticResource Muted}" FontSize="9"/>
+                </DockPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

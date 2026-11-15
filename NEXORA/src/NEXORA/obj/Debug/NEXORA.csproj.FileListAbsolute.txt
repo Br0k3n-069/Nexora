@@ -1,0 +1,13 @@
+C:\Users\USER\Downloads\NEXORA\src\NEXORA\bin\Debug\NEXORA.exe.config
+C:\Users\USER\Downloads\NEXORA\src\NEXORA\bin\Debug\NEXORA.exe
+C:\Users\USER\Downloads\NEXORA\src\NEXORA\bin\Debug\NEXORA.pdb
+C:\Users\USER\Downloads\NEXORA\src\NEXORA\obj\Debug\NEXORA.csproj.AssemblyReference.cache
+C:\Users\USER\Downloads\NEXORA\src\NEXORA\obj\Debug\MainWindow.baml
+C:\Users\USER\Downloads\NEXORA\src\NEXORA\obj\Debug\App.baml
+C:\Users\USER\Downloads\NEXORA\src\NEXORA\obj\Debug\MainWindow.g.cs
+C:\Users\USER\Downloads\NEXORA\src\NEXORA\obj\Debug\App.g.cs
+C:\Users\USER\Downloads\NEXORA\src\NEXORA\obj\Debug\NEXORA_MarkupCompile.cache
+C:\Users\USER\Downloads\NEXORA\src\NEXORA\obj\Debug\NEXORA.g.resources
+C:\Users\USER\Downloads\NEXORA\src\NEXORA\obj\Debug\NEXORA.csproj.CoreCompileInputs.cache
+C:\Users\USER\Downloads\NEXORA\src\NEXORA\obj\Debug\NEXORA.exe
+C:\Users\USER\Downloads\NEXORA\src\NEXORA\obj\Debug\NEXORA.pdb
