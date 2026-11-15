@@ -67,7 +67,7 @@ namespace NEXORA.Services
 
             if (scheme == "vmess")
             {
-                var payload = uri.Host;
+                var payload = uri.OriginalString.Substring("vmess://".Length).Split('?')[0].Split('#')[0];
                 var decoded = TryDecodeBase64(payload);
                 if (string.IsNullOrWhiteSpace(decoded)) return false;
                 var json = decoded;
