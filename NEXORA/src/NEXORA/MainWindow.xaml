@@ -183,7 +183,7 @@
                             <DockPanel Grid.Row="4" Margin="0,12,0,0">
                                 <Button Content="Export links" Click="ExportLinks_Click" Margin="0,0,8,0"/>
                                 <Button Content="Export JSON" Click="ExportJson_Click"/>
-                                <TextBlock DockPanel.Dock="Right" Text="Export opens a preview before saving." Style="{StaticResource Muted}" FontSize="10" VerticalAlignment="Center"/>
+                                <TextBlock DockPanel.Dock="Right" Text="Preview may contain private subscription tokens. Review before saving or sharing." Style="{StaticResource Muted}" FontSize="10" VerticalAlignment="Center"/>
                             </DockPanel>
                         </Grid>
 
@@ -248,7 +248,8 @@
                             <TextBlock Text="LOCAL DATA DIRECTORY" Style="{StaticResource SectionLabel}"/>
                             <TextBlock Text="%LOCALAPPDATA%\NEXORA" FontSize="12" Margin="0,5,0,17"/>
                             <TextBlock Text="COMPATIBILITY" Style="{StaticResource SectionLabel}"/>
-                            <TextBlock x:Name="CompatibilityText" Text="Checking system…" Style="{StaticResource Muted}" FontSize="11" TextWrapping="Wrap" Margin="0,5,0,0"/>
+                            <TextBlock x:Name="CompatibilityText" Text="Checking system…" Style="{StaticResource Muted}" FontSize="11" TextWrapping="Wrap" Margin="0,5,0,12"/>
+                            <StackPanel Orientation="Horizontal"><Button Content="Check updates" Click="CheckUpdates_Click" Margin="0,0,8,0"/><Button Content="Changelog" Click="ShowChangelog_Click" Margin="0,0,8,0"/><Button Content="About NEXORA" Click="ShowAbout_Click"/></StackPanel>
                         </StackPanel>
                     </Grid>
                 </ScrollViewer>
