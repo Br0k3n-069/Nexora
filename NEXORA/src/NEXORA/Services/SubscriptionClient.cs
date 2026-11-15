@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using NEXORA.Models;
 
@@ -26,11 +27,17 @@ namespace NEXORA.Services
                 request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
                 using (var response = (HttpWebResponse)request.GetResponse())
                 using (var stream = response.GetResponseStream())
-                using (var reader = new StreamReader(stream, Encoding.UTF8, true))
+                using (var memory = new MemoryStream())
                 {
-                    if (response.ContentLength > 5 * 1024 * 1024)
-                        throw new InvalidOperationException("Subscription response exceeds 5 MB.");
-                    return reader.ReadToEnd();
+                    var buffer = new byte[8192];
+                    int read;
+                    while ((read = stream.Read(buffer, 0, buffer.Length)) > 0)
+                    {
+                        if (memory.Length + read > 5 * 1024 * 1024)
+                            throw new InvalidOperationException("Subscription response exceeds 5 MB.");
+                        memory.Write(buffer, 0, read);
+                    }
+                    return Encoding.UTF8.GetString(memory.ToArray());
                 }
             });
         }
@@ -46,14 +53,38 @@ namespace NEXORA.Services
         public ServerNode ImportConfigFile(string path, string sourceId)
         {
             var ext = Path.GetExtension(path).ToLowerInvariant();
-            var protocol = ext == ".ovpn" ? "OpenVPN" :
-                ext == ".conf" ? "WireGuard / AmneziaWG" : "Configuration";
+            var text = ReadConfigFile(path);
+            var protocol = "Configuration";
+            var host = "Imported configuration";
+            var port = 0;
+
+            if (ext == ".ovpn")
+            {
+                protocol = "OpenVPN";
+                var remote = Regex.Match(text, @"(?im)^\s*remote\s+([^\s#]+)(?:\s+(\d+))?");
+                if (remote.Success)
+                {
+                    host = remote.Groups[1].Value;
+                    int.TryParse(remote.Groups[2].Value, out port);
+                }
+            }
+            else if (ext == ".conf")
+            {
+                protocol = Regex.IsMatch(text, @"(?im)^\s*(Jc|Jmin|Jmax|S1|S2|H1|H2)\s*=") ? "AmneziaWG" : "WireGuard";
+                var endpoint = Regex.Match(text, @"(?im)^\s*Endpoint\s*=\s*([^:#\s]+)(?::(\d+))?");
+                if (endpoint.Success)
+                {
+                    host = endpoint.Groups[1].Value;
+                    int.TryParse(endpoint.Groups[2].Value, out port);
+                }
+            }
+
             return new ServerNode
             {
                 Name = Path.GetFileNameWithoutExtension(path),
                 Protocol = protocol,
-                Host = "Imported configuration",
-                Port = 0,
+                Host = host,
+                Port = port,
                 SourceId = sourceId,
                 ConfigFile = path
             };
