@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
+using System.Windows.Media.Animation;
+using Microsoft.Win32;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -12,6 +15,7 @@ namespace NEXORA
     public partial class MainWindow : Window
     {
         private readonly ProfileStore _profileStore = new ProfileStore();
+        private readonly SubscriptionStore _subscriptionStore = new SubscriptionStore();
         private readonly DemoConnectionEngine _connectionEngine = new DemoConnectionEngine();
         private readonly System.Collections.ObjectModel.ObservableCollection<Profile> _profiles;
 
@@ -23,11 +27,14 @@ namespace NEXORA
 
             _profiles = _profileStore.Load();
             ProfilesList.ItemsSource = _profiles;
+            SubscriptionsList.ItemsSource = _subscriptionStore.Sources;
+            SubscriptionNodesList.ItemsSource = _subscriptionStore.Nodes;
 
             _pages = new Dictionary<string, FrameworkElement>
             {
                 { "Dashboard", DashboardPage },
                 { "Connections", ConnectionsPage },
+                { "Subscriptions", SubscriptionsPage },
                 { "Profiles", ProfilesPage },
                 { "Theme", ThemePage },
                 { "Layout", LayoutPage },
@@ -54,11 +61,20 @@ namespace NEXORA
             FrameworkElement selected;
             if (!_pages.TryGetValue(key, out selected)) return;
             selected.Visibility = Visibility.Visible;
+            selected.Opacity = 0;
+            if (AnimationsEnabled != null && AnimationsEnabled.IsChecked == true && (ReducedMotion == null || ReducedMotion.IsChecked != true))
+            {
+                var duration = AnimationDuration == null ? 240 : (int)AnimationDuration.Value;
+                var animation = new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(duration));
+                animation.EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseOut };
+                selected.BeginAnimation(UIElement.OpacityProperty, animation);
+            }
+            else selected.Opacity = 1;
 
             var titles = new Dictionary<string, string>
             {
                 { "Dashboard", "Dashboard" }, { "Connections", "Connections" },
-                { "Profiles", "Profiles" }, { "Theme", "Theme Studio" },
+                { "Profiles", "Profiles" }, { "Subscriptions", "Subscriptions" }, { "Theme", "Theme Studio" },
                 { "Layout", "Layout Editor" }, { "Animations", "Animations" },
                 { "Settings", "Settings" }
             };

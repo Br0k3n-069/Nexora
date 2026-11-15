@@ -57,6 +57,7 @@
                     <TextBlock Text="WORKSPACE" Style="{StaticResource SectionLabel}" Margin="7,0,0,8"/>
                     <Button Style="{StaticResource NavButton}" Content="▦   Overview" Tag="Dashboard" Click="Navigate_Click"/>
                     <Button Style="{StaticResource NavButton}" Content="↔   Connections" Tag="Connections" Click="Navigate_Click"/>
+                    <Button Style="{StaticResource NavButton}" Content="▧   Subscriptions" Tag="Subscriptions" Click="Navigate_Click"/>
                     <Button Style="{StaticResource NavButton}" Content="▤   Profiles" Tag="Profiles" Click="Navigate_Click"/>
                     <Border Height="1" Background="{DynamicResource BorderBrush}" Margin="5,13,5,13"/>
                     <TextBlock Text="APPEARANCE" Style="{StaticResource SectionLabel}" Margin="7,0,0,8"/>
@@ -143,6 +144,49 @@
                             </Border>
                         </StackPanel>
 
+
+                        <Grid x:Name="SubscriptionsPage" Visibility="Collapsed">
+                            <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="12"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="SUBSCRIPTION MANAGER" Style="{StaticResource SectionLabel}"/>
+                                <TextBlock Text="Sources and imported configurations" FontSize="18" FontWeight="SemiBold" Margin="0,7,0,4"/>
+                                <TextBlock Text="Add an HTTP(S) subscription URL or import a local config file. Imported data stays on this device." Style="{StaticResource Muted}" FontSize="11" TextWrapping="Wrap" Margin="0,0,0,14"/>
+                            </StackPanel>
+                            <Grid Grid.Row="1">
+                                <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="10"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                                <TextBox x:Name="SubscriptionUrlBox" VerticalContentAlignment="Center" ToolTip="https://example.com/subscription"/>
+                                <Button Grid.Column="2" Content="+ Add URL" Style="{StaticResource PrimaryButton}" Click="AddSubscription_Click"/>
+                            </Grid>
+                            <Grid Grid.Row="3">
+                                <Grid.ColumnDefinitions><ColumnDefinition Width="1.1*"/><ColumnDefinition Width="12"/><ColumnDefinition Width="1.4*"/></Grid.ColumnDefinitions>
+                                <Border Grid.Column="0" Style="{StaticResource Surface}" Padding="12">
+                                    <DockPanel>
+                                        <StackPanel DockPanel.Dock="Top">
+                                            <TextBlock Text="SOURCES" Style="{StaticResource SectionLabel}" Margin="0,0,0,9"/>
+                                            <Button Content="Import config file..." HorizontalAlignment="Left" Click="ImportConfig_Click" Margin="0,0,0,8"/>
+                                            <Button Content="Update selected" HorizontalAlignment="Left" Click="UpdateSubscription_Click" Margin="0,0,0,8"/>
+                                            <Button Content="Remove selected" HorizontalAlignment="Left" Click="RemoveSubscription_Click"/>
+                                        </StackPanel>
+                                        <ListBox x:Name="SubscriptionsList" Margin="0,12,0,0" Background="Transparent" BorderThickness="0" Foreground="{DynamicResource TextBrush}" SelectionChanged="SubscriptionsList_SelectionChanged" DisplayMemberPath="Name"/>
+                                    </DockPanel>
+                                </Border>
+                                <Border Grid.Column="2" Style="{StaticResource Surface}" Padding="12">
+                                    <DockPanel>
+                                        <StackPanel DockPanel.Dock="Top">
+                                            <TextBlock Text="IMPORTED NODES" Style="{StaticResource SectionLabel}" Margin="0,0,0,9"/>
+                                            <TextBlock x:Name="SubscriptionStatusText" Text="Select a source to view its nodes." Style="{StaticResource Muted}" FontSize="10" TextWrapping="Wrap" Margin="0,0,0,8"/>
+                                        </StackPanel>
+                                        <ListBox x:Name="SubscriptionNodesList" Background="Transparent" BorderThickness="0" Foreground="{DynamicResource TextBrush}" DisplayMemberPath="Name"/>
+                                    </DockPanel>
+                                </Border>
+                            </Grid>
+                            <DockPanel Grid.Row="4" Margin="0,12,0,0">
+                                <Button Content="Export links" Click="ExportLinks_Click" Margin="0,0,8,0"/>
+                                <Button Content="Export JSON" Click="ExportJson_Click"/>
+                                <TextBlock DockPanel.Dock="Right" Text="Preview may contain private subscription tokens. Review before saving or sharing." Style="{StaticResource Muted}" FontSize="10" VerticalAlignment="Center"/>
+                            </DockPanel>
+                        </Grid>
+
                         <!-- Profiles -->
                         <Grid x:Name="ProfilesPage" Visibility="Collapsed">
                             <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="12"/><RowDefinition Height="*"/></Grid.RowDefinitions>
@@ -187,9 +231,12 @@
                             <TextBlock Text="Motion and feedback" FontSize="18" FontWeight="SemiBold" Margin="0,7,0,4"/>
                             <TextBlock Text="Keep interface motion subtle and purposeful." Style="{StaticResource Muted}" FontSize="11" Margin="0,0,0,20"/>
                             <CheckBox x:Name="AnimationsEnabled" Content="Enable interface animations" IsChecked="True" Margin="0,0,0,16"/>
-                            <TextBlock Text="ANIMATION INTENSITY" Style="{StaticResource SectionLabel}" Margin="0,0,0,8"/>
-                            <Slider Minimum="0" Maximum="100" Value="45" Width="340" HorizontalAlignment="Left"/>
-                            <TextBlock Text="Reduced-motion behavior will be respected by the full animation engine." Style="{StaticResource Muted}" FontSize="10" Margin="0,12,0,0"/>
+                            <TextBlock Text="ANIMATION PRESET" Style="{StaticResource SectionLabel}" Margin="0,0,0,8"/>
+                            <ComboBox x:Name="AnimationPresetPicker" Width="230" HorizontalAlignment="Left" SelectedIndex="1"><ComboBoxItem Content="Minimal"/><ComboBoxItem Content="Smooth"/><ComboBoxItem Content="Dynamic"/></ComboBox>
+                            <TextBlock Text="DURATION (MS)" Style="{StaticResource SectionLabel}" Margin="0,17,0,8"/><Slider x:Name="AnimationDuration" Minimum="100" Maximum="700" Value="240" Width="340" HorizontalAlignment="Left"/>
+                            <TextBlock Text="MOTION INTENSITY" Style="{StaticResource SectionLabel}" Margin="0,17,0,8"/><Slider x:Name="AnimationIntensity" Minimum="0" Maximum="100" Value="45" Width="340" HorizontalAlignment="Left"/>
+                            <CheckBox x:Name="ReducedMotion" Content="Reduce motion" Margin="0,17,0,0"/>
+                            <TextBlock Text="Page transitions and interaction feedback use these settings. Reduced motion disables transitions." Style="{StaticResource Muted}" FontSize="10" Margin="0,12,0,0"/>
                         </StackPanel>
 
                         <!-- Settings -->
@@ -201,7 +248,8 @@
                             <TextBlock Text="LOCAL DATA DIRECTORY" Style="{StaticResource SectionLabel}"/>
                             <TextBlock Text="%LOCALAPPDATA%\NEXORA" FontSize="12" Margin="0,5,0,17"/>
                             <TextBlock Text="COMPATIBILITY" Style="{StaticResource SectionLabel}"/>
-                            <TextBlock x:Name="CompatibilityText" Text="Checking system…" Style="{StaticResource Muted}" FontSize="11" TextWrapping="Wrap" Margin="0,5,0,0"/>
+                            <TextBlock x:Name="CompatibilityText" Text="Checking system…" Style="{StaticResource Muted}" FontSize="11" TextWrapping="Wrap" Margin="0,5,0,12"/>
+                            <StackPanel Orientation="Horizontal"><Button Content="Check updates" Click="CheckUpdates_Click" Margin="0,0,8,0"/><Button Content="Changelog" Click="ShowChangelog_Click" Margin="0,0,8,0"/><Button Content="About NEXORA" Click="ShowAbout_Click"/></StackPanel>
                         </StackPanel>
                     </Grid>
                 </ScrollViewer>
