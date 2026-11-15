@@ -52,10 +52,18 @@
     <Compile Include="MainWindow.xaml.cs"><DependentUpon>MainWindow.xaml</DependentUpon></Compile>
     <Compile Include="Models\ConnectionStatus.cs" />
     <Compile Include="Models\Profile.cs" />
+    <Compile Include="Models\ServerNode.cs" />
+    <Compile Include="Models\SubscriptionSource.cs" />
+    <Compile Include="Models\NotificationItem.cs" />
     <Compile Include="Services\ThemeService.cs" />
     <Compile Include="Services\ProfileStore.cs" />
     <Compile Include="Services\IConnectionEngine.cs" />
     <Compile Include="Services\DemoConnectionEngine.cs" />
+    <Compile Include="Services\SubscriptionParser.cs" />
+    <Compile Include="Services\SubscriptionStore.cs" />
+    <Compile Include="Services\SubscriptionClient.cs" />
+    <Compile Include="Services\SubscriptionExporter.cs" />
+    <Compile Include="MainWindow.Subscriptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
