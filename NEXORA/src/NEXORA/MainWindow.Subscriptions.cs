@@ -116,7 +116,7 @@ namespace NEXORA
         private void SubscriptionsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var source = SubscriptionsList.SelectedItem as SubscriptionSource;
-            SubscriptionNodesList.ItemsSource = source == null ? _subscriptionStore.Nodes :
+            SubscriptionNodesList.ItemsSource = source == null ? (object)_subscriptionStore.Nodes :
                 _subscriptionStore.Nodes.Where(n => n.SourceId == source.Id).ToList();
             if (source != null)
                 SubscriptionStatusText.Text = source.Nodes.Count + " nodes · " +
